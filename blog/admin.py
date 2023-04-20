@@ -24,6 +24,11 @@ class PostAdmin(admin.ModelAdmin):
 
     list_display = ('title','author','date')
 
+class CommentAdmin(admin.ModelAdmin):
+
+    list_display = ('post','comment','author')
+
+
 admin.site.register(CustomUser,CustomUserAdmin)
 admin.site.register(Post,PostAdmin)
-admin.site.register(Comment)
+admin.site.register(Comment,CommentAdmin)
