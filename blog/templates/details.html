@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2>Recent posts</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="entry2">
+                {% if post.picture %}
+                <img class="img-fluid rounded" src="{{post.picture.url}}" alt="{{post.title}}">
+                {% endif %}
+                <div class="excerpt">
+                    <span class="post-category text-white bg-secondary mb-3">friends</span>
+                    <h2>{{post.title}}</h2>
+                    <div class="post-meta align-itmes-center text-left clearfix">
+                        <figure class="author-figure mb-0 mr-3 float-left">
+                            {% if post.picture %}
+                            <img class="img-fluid" src="{{post.picture.url}}" alt="{{post.title}}">
+                            {% endif %}
+                        </figure>
+                        <span class="d-inline-block mt-1">By {{post.author}}</span>
+                        <span>{{post.date}}</span>
+                    </div>
+                    <p>{{post.body}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="post-entry">
+    
+    <img class="bookcover" src="" alt="">
+    
+    <h2></h2>
+    <p>by  | </p>
+    <p></p>
+</div>
+<a href="{% url 'edit' post.id %}">Edit your Blog Post</a> |
+<a href="{% url 'delete' post.id %}">Delete your Blog Post</a>
+<p> Back to <a href="{% url 'home' %}">Home</a>.</p>
+
+{% endblock %}

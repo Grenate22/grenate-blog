@@ -1,0 +1,32 @@
+header h1 a {
+    color: red;
+    text-decoration: none;
+}
+body{
+    font-family: 'source san pro', sans-serif;
+    font-size: 18px;
+}
+
+header{
+    border-bottom: 1px solid #999;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-around;
+    
+}
+
+.nav-right a {
+    text-decoration: none;
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+.nav-right{
+    display: flex;
+    padding-bottom: 2rem;
+}
+
+.nav-left{
+    margin-right: auto;
+}

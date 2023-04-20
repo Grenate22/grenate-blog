@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %} Blog post {% endblock %}
+
+{% block content %}
+
+{% for post in object_list %}
+<div class="container">
+    <div class="card-header">
+        <span class="font-weight-bold"><a href="{% url 'details' post.id %}">{{post.title}}</a></span>
+        <span class="text-muted">by {{post.author}} | {{post.date}}</span>
+    </div>
+    <div class="card  flex-row-reverse">
+        {% if post.picture %}
+        <img class="col-lg-2 card-img-end img-fluid" style="width: 8rem;" src="{{post.picture.url}}" alt="{{post.title}}">
+        {% endif %}
+        <div class="card-body">
+            <h4 class="card-title font-weight-bold link-dark"><a  href="{% url 'details' post.id %}" class="link-secondary">{{post.title}}</a></h4>
+            <p class="card-text">{{post.body|truncatechars:200}}</p>
+        </div>
+    </div>
+    <div class="card-footer ">
+        <p>Add your comment <a href="{% url 'make_comment' %}">here</a>.</p>
+        {% for comment in post.comments.all %}
+        <p>
+            {% if comment.author == post.author %}
+            <span class="font-weight-bold">
+                Author &middot;
+            </span>
+            {{comment.comment}}
+            {% else %}
+            <span class="font-weight-bold">
+                {{comment.author}} &middot;
+            </span>
+            {{comment.comment}}
+            {% endif %}
+        </p>
+        {% endfor %} 
+    </div>
+</div>
+<br>
+{% endfor %}
+<div>
+    {% if page_obj.has_previous %}
+    <a href="{% url 'home' %}?page={{ page_obj.previous_page_number }}">previous</a>
+    {% endif %}
+    page {{page_obj.number}} of {{page_obj.paginator.num_pages }}
+    {% if page_obj.has_next %}
+    <a href="{% url 'home' %}?page={{ page_obj.next_page_number }}">next</a>
+    {% endif %}
+</div>
+
+{% endblock %}
