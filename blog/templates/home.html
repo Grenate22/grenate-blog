@@ -19,7 +19,7 @@
         <img class="col-lg-2 card-img-end img-fluid" style="width: 8rem;" src="{{post.picture.url}}" alt="{{post.title}}">
         {% endif %}
         <div class="card-body">
-            <h4 class="card-title font-weight-bold "><a  href="{% url 'details' post.id %}" class="text-dark">{{post.title}}</a></h4>
+            <h4 class="card-title font-weight-bold "><a  href="{% url 'details' post.id %}" class="text-dark">{{post.title|truncatechars:200}}</a></h4>
             <p class="card-text">{{post.body|truncatechars:200}}</p>
         </div>
     </div>
