@@ -3,9 +3,9 @@ from django.urls import reverse
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
-
 from datetime import datetime
 import uuid
+from PIL import Image
 # Create your models here.
 class Post(models.Model):
     # i add the id field to give me control over my url to give me a irregular url so hacker cant use that to guess how many number of pages i have
@@ -29,9 +29,30 @@ class Post(models.Model):
         return reverse ('details',args=[str(self.id)])
 
 #abstractuser allow you to modify the customuser django give us 
+class Profile(models.Model):
+    username= models.OneToOneField('blog.CustomUser',on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=100)
+    social_media = models.URLField(max_length=200,null=True,blank=True)
+    avatar = models.ImageField(default='profile_pic/avatar.png', upload_to='profile_pic/')
+    bio = models.TextField()
+
+    def __str__(self) :
+        return self.full_name
+     
+    def save(self,*args, **kwargs):
+        super().save()
+
+        img = Image.open(self.avatar.path)
+
+        if img.height > 100 or img.width > 100:
+            new_img = (100, 100)
+            img.thumbnail(new_img)
+            img.save(self.avatar.path)
+
+    
+
 class CustomUser(AbstractUser):
     age=models.PositiveIntegerField(null=True,blank=True)
-    firstname=models.CharField(max_length=20,null=True)
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE,related_name='comments')

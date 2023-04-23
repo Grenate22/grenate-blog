@@ -1,17 +1,66 @@
-from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin,PermissionRequiredMixin
-from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin,UserPassesTestMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView,TemplateView
 from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.urls import reverse_lazy,reverse
-from .models import Post , Comment
+from .models import Post , Comment, Profile
 from django.views.generic import CreateView
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm,LoginForm,UpdateUserForm,UpdateProfileForm
 from django.contrib import messages
 from django.core.paginator import Paginator,EmptyPage
+from django.db.models import Q
+from django.http import response
+from django.contrib import messages 
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 class BlogHomeView(TemplateView):
     template_name='index.html'
+    #def get_context_data(self, **kwargs):
+        #context = super().get_context_data(**kwargs)
+        #context['user_id'] = self.request.user.id
+        #return context
+
+class SignUpView(SuccessMessageMixin,CreateView):
+    form_class=CustomUserCreationForm
+    success_url=reverse_lazy('login')
+    template_name='registration/signup.html'
+    success_message = "Account successfully created!"
+
+class CustomLoginView(LoginView):
+    form_class = LoginForm
+
+    def form_valid(self, form):
+        remember_me = form.cleaned_data.get('remember_me')
+        if not remember_me:
+            self.request.session.set_expiry(0)
+            self.request.session.modified = True
+        return super(CustomLoginView, self).form_valid(form)
+    
+class UpdateUserView(LoginRequiredMixin,SuccessMessageMixin,UpdateView):
+    form_class = UpdateUserForm
+    template_name='registration/update_user.html'
+    success_message = "Your user account is updated successfully"
+    context_object_name = 'profile'
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'Your profile is updated successfully')
+            return redirect(to='profile')
+    else:
+        profile_form = UpdateProfileForm(instance=request.user.profile)
+
+        return render(request, 'profile.html', {'profile_form': profile_form})
+
+
+
 
 #subclass that return the first page if the number is less then 1 and return last page if the number exceed the number of pages available
 class MyPaginator(Paginator):
@@ -27,7 +76,7 @@ class MyPaginator(Paginator):
                 raise
 #loginrequiredmixin redirect user back to login to have access to that view or template
 #paginate_by give how many object i want to display per page
-class BlogListView(LoginRequiredMixin, ListView):
+class BlogListView(ListView):
     model=Post
     template_name='home.html'
     paginate_by = 3
@@ -82,10 +131,7 @@ class BlogDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         obj = self.get_object()
         return obj.author == self.request.user
 
-class SignUpView( CreateView):
-    form_class=CustomUserCreationForm
-    success_url=reverse_lazy('login')
-    template_name='registration/signup.html'
+
 
 class CommentView(CreateView):
     model = Comment
@@ -97,7 +143,18 @@ class CommentView(CreateView):
         form.instance.author=self.request.user
         return super().form_valid(form)
     
+class SearchResultListView(ListView):
+    model = Post
+    context_object_name = 'post_list'
+    template_name = 'search_results.html'
+
+    #queryset = Post.objects.filter(title__icontains='microsoft')
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        return Post.objects.filter(Q(title__icontains=query)| Q(date__icontains=query))
     
+
 
 
 

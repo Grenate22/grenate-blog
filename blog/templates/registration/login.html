@@ -17,20 +17,47 @@
                                     <form action="" method="post">
                                         <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your account</h5>
                                         {% csrf_token %}
-                                        {{ form|crispy }}
-                                        <div class="pt-1 mb-4">
-                                            <button class="btn btn-dark btn-lg btn-block" type="submit">Login</button>
-                                          </div>
-                                          <a class="small text-muted" href="{% url 'password_reset' %}">Forgot password?</a>
-                                          <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a href="{% url 'signup' %}"
-                                            style="color: #393f81;">Register here</a></p>
-                                            <a href="" class="small text-muted">Terms of use.</a>
-                                            <a href="" class="small text-muted">Privacy policy</a>
-                  
+                                        <div class="form-row">
+                                            <div class="col-md-10 offset-md-1">
+                                                <div class="form-group">
+                                                    <label class="small mb-1">Username</label>
+                                                    {{form.username}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-10 offset-md-1">
+                                                <div class="form-group">
+                                                    <label class="small mb-1">password</label>
+                                                    {{form.password}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md 10 offset-md-1">
+                                                <div class="form-group">
+                                                    {{form.remember_me}}
+                                                    <label for="">Remember me</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md 10 offset-md-1">
+                                                <div class="form-group mt-0 mb-1">
+                                                    <button name="login" class="col-md-12 btn btn-dark" id="login">Sign in</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </form>
+                                    <div class="card-footer text-center">
+                                        <div class="small">
+                                            <a href="">Don't have an account yet? Go to singup</a><br>
+                                            <a href=""><i>Forgot Password?</i></a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        
+
                     </div>
                 </div>
             </div>

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}
+Profile
+{% endblock %}
+
+{% block content %}
+<div class="row my-3 p-3">
+    <img class="rounded-circle account-img" src="{{profile.avatar.url}}" alt="">
+</div>
+<h3> {{profile_form.bio}}</h3>
+<h2>my head</h2>
+<form  method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{user_form.username}}
+   
+</form>
+
+{% endblock %}
+

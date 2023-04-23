@@ -1,16 +1,16 @@
 from django.contrib import admin
-from .models import Post,Comment
+from .models import Post,Comment,Profile
 from django.contrib.auth.admin import UserAdmin
-from .forms import CustomUserCreationForm,CustomUserChangeForm
+from .forms import CustomUserCreationForm, UpdateUserForm
 from .models import CustomUser
 
 class CustomUserAdmin(UserAdmin):
     add_form=CustomUserCreationForm
-    form=CustomUserChangeForm
+    form=UpdateUserForm
     model=CustomUser
-    list_display= ['email','username','age','is_staff','password','firstname']
-    fieldsets=UserAdmin.fieldsets + ((None,{'fields':('age','firstname')}),)
-    add_fieldsets=UserAdmin.add_fieldsets + ((None,{'fields':('age','firstname')}),)
+    list_display= ['email','username','is_staff']
+    #fieldsets=UserAdmin.fieldsets + ((None,{'fields':('age',)}),)
+    #add_fieldsets=UserAdmin.add_fieldsets + ((None,{'fields':('age',)}),)
 # Register your models here.
 
 class CommentInLine(admin.TabularInline):
@@ -28,7 +28,12 @@ class CommentAdmin(admin.ModelAdmin):
 
     list_display = ('post','comment','author')
 
+class ProfileAdmin(admin.ModelAdmin):
+
+    list_display = ('username','full_name')
+
 
 admin.site.register(CustomUser,CustomUserAdmin)
 admin.site.register(Post,PostAdmin)
 admin.site.register(Comment,CommentAdmin)
+admin.site.register(Profile,ProfileAdmin)

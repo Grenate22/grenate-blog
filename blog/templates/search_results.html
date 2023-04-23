@@ -1,0 +1,15 @@
+ {%extends "base.html" %}
+{% block title %}
+Search
+{% endblock %}
+
+{% block content %}
+<h1>Search Results</h1>
+{% for post in post_list %}
+<div>
+    <h3><a href="{{post.get_absolute_url}}">{{post.title}}</a></h3>
+    <p>Author:{{post.author}}</p>
+    <p>Date-posted:{{post.date}}</p>
+</div>
+{% endfor %}
+{% endblock %}
