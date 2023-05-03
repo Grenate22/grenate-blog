@@ -37,10 +37,9 @@ ALLOWED_HOSTS = ['.herokuapp.com', 'localhost', '127.0.0.1']
 INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
-    'allauth',
-    'allauth.account',
     'blog',
     'accounts',
+    'django.contrib.humanize',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,13 +48,27 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google'
     
 
 ]
 
-# i have an issue with timezone and i was able to solve it with this method django come with his oen timezone so i have to delete that one 
-USE_TZ = True
-TIME_ZONE = 'Africa/Lagos'
+SOCIALACCOUNT_PROVIDERS = {
+    'google' : {
+        'SCOPE' : [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS' : {
+            'access_type' : 'online',
+        }
+    }
+}
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -94,8 +107,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env("DB_NAME"),
+        'USER': env("DB_USER"),
+        'PASSWORD': env("DB_PASSWORD"),
+        'HOST': env("DB_HOST"),
+        'PORT': env("DB_PORT")
     }
 }
 
@@ -124,6 +141,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
+# i have an issue with timezone and i was able to solve it with this method django come with his oen timezone so i have to delete that one 
+TIME_ZONE = 'Africa/Lagos'
 
 USE_I18N = True
 
@@ -149,7 +168,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #i have to add the auth_user_model so it will allow me to customise the built in django auth
 LOGIN_REDIRECT_URL='home'
 LOGOUT_REDIRECT_URL='home'
-AUTH_USER_MODEL= 'blog.CustomUser'
+AUTH_USER_MODEL= 'accounts.CustomUser'
 
 CRISPY_TEMPLATE_PACK= 'bootstrap4'
 
@@ -157,6 +176,10 @@ EMAIL_BACKEND  = 'django.core.mail.backends.console.EmailBackend'
 
 SITE_ID = 1
 
+
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
                            'allauth.account.auth_backends.AuthenticationBackend',
                            )
+
+ACCOUNT_SESSION_REMEMBER = False
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30

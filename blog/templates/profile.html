@@ -2,18 +2,69 @@
 {% block title %}
 Profile
 {% endblock %}
-
 {% block content %}
-<div class="row my-3 p-3">
-    <img class="rounded-circle account-img" src="{{profile.avatar.url}}" alt="">
+<br>
+<div class="container">
+<div class=" mt-4 mb-4 p-3 d-flex justify-content-center">
+     <div class="card p-4"> 
+        <div class=" image d-flex flex-column justify-content-center align-items-center">
+             <button class="btn btn-secondary"> <img src="{{profile.avatar.url}}" height="100" width="100" /></button>
+              <span class="name mt-3">{{profile.full_name}}</span> <span class="idd">@{{profile.username}}</span>  
+              {% if post.count >= 1 %}
+              <div class="d-flex flex-row justify-content-center align-items-center mt-3"> <span class="number" >{{post.count}} <span class="follow">Posts</span></span> </div> 
+              {% else %}
+              <div class="d-flex flex-row justify-content-center align-items-center mt-3"> <span class="number text-muted">{{post.count}} <span class="follow">Post</span></span> </div>
+              {% endif %}
+                    <div class="d-flex flex-row justify-content-center align-items-center mt-3 profile-info-value">
+                    <a href=" {{profile.website_url}} " target="_blank">{{profile.website_url}}</a>
+                    </div>
+                    <div class="profile-info-value">
+                    <a href="{{profile.instagram_url}}" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+                    </div>
+                    <div class="profile-info-value">
+                    <a href="{{profile.linkedln_url}}" target="_blank"><i class="fab fa-linkedin-in"></i> Linkedln</a>
+                    </div>
+                    <div class="profile-info-value">
+                    <a href="{{profile.linkedln_url}}" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>
+                    </div>
+                    <div class="profile-info-value">
+                    <a href="{{profile.linkedln_url}}" target="_blank"><i class="fab fa-facebook-f"></i> Facebook</a>
+                    </div>
+                    <div class=" px-2 rounded mt-4 date ">Date Joined: <span class="join">{{user.date_joined}}</span> </div>
+                    <div class="widget-header widget-header-small">
+                        <h4 class="widget-title smaller">
+                          <i class="ace-icon fa fa-check-square-o bigger-110"></i>
+                          Little About Me 
+                          <div class="text mt-3"> <span>{{profile.bio}} </span> </div>
+                        </h4>
+                      </div>
+                
+              <div class=" d-flex mt-2"> <button type="button" class="btn1 btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Edit Profile</button> </div>
+                 
+                 </div>
+                 </div>
 </div>
-<h3> {{profile_form.bio}}</h3>
-<h2>my head</h2>
-<form  method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{user_form.username}}
-   
-</form>
-
+<div class="modal fade" tabindex="-1" id="profileModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Profile</h5>
+                <button type="button" class="close" data-dimiss="modal" arial-label="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{form.as_p}}
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
 {% endblock %}
 

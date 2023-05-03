@@ -10,6 +10,8 @@ django-allauth = "*"
 environs = {extras = ["django"], version = "*"}
 django-environ = "*"
 pillow = "*"
+psycopg2 = "*"
+humanize = "*"
 
 [dev-packages]
 

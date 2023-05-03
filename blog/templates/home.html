@@ -1,57 +1,83 @@
 {% extends 'base.html' %}
+{% load humanize %}
 
 {% block title %} Blog post {% endblock %}
 
 {% block content %}
+<br>
 
-{% for post in object_list %}
-<div class="container">
-    <div class="card-header">
-        <span class="font-weight=light text-light"><a href="{% url 'details' post.id %}" class="text-dark"> {{post.title}}</a></span>
-        {% if post.is_admin %}
-        <span class="text-muted">by Author | {{post.date}}</span>
-        {% else %}
-        <span class="text-muted">by {{post.author}} | {{post.date}}</span>
-        {% endif %}
-    </div>
-    <div class="card  flex-row-reverse">
-        {% if post.picture %}
-        <img class="col-lg-2 card-img-end img-fluid" style="width: 8rem;" src="{{post.picture.url}}" alt="{{post.title}}">
-        {% endif %}
-        <div class="card-body">
-            <h4 class="card-title font-weight-bold "><a  href="{% url 'details' post.id %}" class="text-dark">{{post.title|truncatechars:200}}</a></h4>
-            <p class="card-text">{{post.body|truncatechars:200}}</p>
+<div id="main-content" class="blog-page">
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-lg-8 col-md-12 left-box">
+                {% for post in post_list %}
+                <div class="card single_post">
+                    <div class="body">
+                        <div class="img-post">
+                            {% if post.picture %}
+                            <img class="d-block img-fluid" src="{{post.picture.url}}" alt="First slide">
+                            {% endif %}
+                        </div>
+                        <h3><a href="{% url 'details' post.pk %}">{{post.title | linebreaks |truncatechars:200}}</a>
+                        <small class="text-muted"> By {{post.author}} | {{post.date|naturaltime }} </small>
+                        <br>
+                        <br>
+                        <p>{{post.body|truncatechars:200 }}</p>
+                    </div>
+                    <div class="footer">
+                        <div class="actions">
+                            <a href="{% url 'details' post.pk %}" class="btn btn-outline-secondary">Continue Reading</a>
+                        </div>
+                        <ul class="stats">
+                            <li><a href="{% url 'category_list' post.category %}">{{post.category}}</a></li>
+                            <li><a href="javascript:void(0);" class="fa fa-heart">{{post.blog_posts.counts}}</a></li>
+                            <li><a href="javascript:void(0);" class="fa fa-comment">{{post.comments.count}}</a></li>
+                        </ul>
+                    </div>
+                </div>
+                {% endfor %}
+                <ul class="pagination pagination-primary">
+                    {% if page_obj.has_previous %}
+                    <li class=""><a class="" href="{% url 'home' %}?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                    {% endif %}
+                    <li class="page-item">page {{page_obj.number}} of {{page_obj.paginator.num_pages }}</li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item"><a class="" href="{% url 'home' %}?page={{ page_obj.next_page_number }}"> Next</a></li>
+                    {% endif %}
+                </ul> 
+            </div> 
+            <div class="col-lg-4 col-md-12 right-box">
+                <div class="card">
+                    <div class="header">
+                        <h2>Categories Clouds</h2>
+                    </div>
+                    <div class="body widget">
+                        <ul class="list-unstyled categories-clouds m-b-0">
+                            {% for cat in category_list %}
+                            <li><a href="">{{cat.name}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                    <div class="card">
+                        <div class="header">
+                            <h2>Popular Posts</h2>                        
+                        </div>
+                        <div class="body widget popular-post">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="single_post">
+                                        <p class="m-b-0">Apple Introduces Search Ads Basic</p>
+                                        <span>jun 22, 2018</span>
+                                    <div class="img-post">
+                                            <img src="https://www.bootdey.com/image/280x280/FFB6C1/000000" alt="Awesome Image">                                        
+                            </div>                                            
+                        </div>
+                    </div>
+            </div>
         </div>
     </div>
-    <div class="card-footer ">
-        <p>Add your comment <a href="{% url 'make_comment' %}">here</a>.</p>
-        {% for comment in post.comments.all %}
-        <p>
-            {% if comment.author == post.author %}
-            <span class="font-weight-bold">
-                Author &middot;
-            </span>
-            {{comment.comment}}
-            {% else %}
-            <span class="font-weight-bold">
-                {{comment.author}} &middot;
-            </span>
-            {{comment.comment}}
-            {% endif %}
-        </p>
-        {% endfor %} 
-    </div>
-</div>
-<br>
-{% endfor %}
-<div>
-    {% if page_obj.has_previous %}
-    <a href="{% url 'home' %}?page={{ page_obj.previous_page_number }}">previous</a>
-    {% endif %}
-    page {{page_obj.number}} of {{page_obj.paginator.num_pages }}
-    {% if page_obj.has_next %}
-    <a href="{% url 'home' %}?page={{ page_obj.next_page_number }}">next</a>
-    {% endif %}
-</div>
+</div>   
+
 
 {% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} Blog post {% endblock %}
+
+{% block content %}
+<h2 class="container">{{cats}}</h2>
+{% for post in category_posts %}
+<div class="container">
+    <div class="card-header">
+        <span class="font-weight=light text-light"><a href="{% url 'details' post.pk %}" class="text-dark"> {{post.title | linebreaks}}</a></span>
+        <span class="text-muted">by {{post.author}} | {{post.date}}</span>
+    </div>
+    <div class="card  flex-row-reverse">
+        {% if post.picture %}
+        <img class="col-lg-2 card-img-end img-fluid" style="width: 8rem;" src="{{post.picture.url}}" alt="{{post.title}}">
+        {% endif %}
+        <div class="card-body">
+            <h4 class="card-title font-weight-bold "><a  href="{% url 'details' post.pk %}" class="text-dark">{{post.title | linebreaks |truncatechars:200}}</a></h4>
+            <p class="card-text">{{post.body|truncatechars:200 |linebreaks }}</p>
+            <small>{{post.category}}</small>
+        </div>
+    </div>
+   
+</div>
+<br>
+{% endfor %}
+<div>
+{% endblock %}
