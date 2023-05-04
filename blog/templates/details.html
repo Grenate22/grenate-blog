@@ -3,7 +3,6 @@
 {% block content %}
 
 <div class="card-footer ">
-    <p>Add your comment <a href="">here</a>.</p>
     {{post.comments.count}}
     {% for comment in post.comments.all %}
     <p>
@@ -11,17 +10,27 @@
         <span class="font-weight-bold">
             Author &middot;
         </span>
-        
         {{comment.comment}}
+        {{comment.timestamp}}
         {% else %}
         <span class="font-weight-bold">
             {{comment.author}} &middot;
         </span>
         {{comment.comment}}
+        {{comment.timestamp}}
         {% endif %}
     </p>
+    {% empty %}
+    <p>No comment yets</p>
     {% endfor %} 
 </div>
+<hr>
+<h3>Add a comments</h3>
+<form  method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Submit</button>
+</form>
 
 <div class="blog-single gray-bg">
     <div class="container">
@@ -55,13 +64,26 @@
                         <a href="{% url 'edit' post.id %}">Edit your Blog Post</a> 
                         <a href="{% url 'delete' post.id %}">Delete your Blog Post</a>
                         {% endif %}
+                        {% if request.user in post.likes.all %}
+                        <form action="{% url 'like_post' post.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Unlike</button>
+                        </form>
+                        {% else %}
+                        <form action="{% url 'like_post' post.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Like</button>
+                        </form>
+                        {% endif %}
+
+                        
+
+
                     </div>
                     <div class="nav tag-cloud">
                         <a href="">{{post.category}}</a>
                     </div>
                 </article>
-                
-               
             </div>
             
             <div class="col-lg-4 m-15px-tb blog-aside">

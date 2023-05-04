@@ -1,7 +1,6 @@
-from .models import CustomUser,Profile
 from django import forms
-from django.contrib.auth.forms import UserChangeForm,UserCreationForm,AuthenticationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from .models import CustomUser,Profile
 
 class CustomUserCreationForm(UserCreationForm):
     username = forms.CharField(max_length=100,
@@ -15,6 +14,7 @@ class CustomUserCreationForm(UserCreationForm):
         return self.cleaned_data['username']
     
     email = forms.EmailField(required=True,
+                             help_text='Enter a valid email address',
                              widget=forms.TextInput(attrs={'placeholder':'Email',
                                                            'class':'form-control',
                                                            }))

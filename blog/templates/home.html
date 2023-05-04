@@ -30,7 +30,11 @@
                         </div>
                         <ul class="stats">
                             <li><a href="{% url 'category_list' post.category %}">{{post.category}}</a></li>
-                            <li><a href="javascript:void(0);" class="fa fa-heart">{{post.blog_posts.counts}}</a></li>
+                            {% if request.user in post.likes.all %}
+                            <li><a href="{% url 'like_post' post.id %}" class="fa fa-heart" style="color: red;">{{post.likes.count}}</a></li>
+                            {% else %}
+                            <li><a href="{% url 'like_post' post.id %}" class="fa fa-heart">{{post.likes.count}}</a></li>
+                            {% endif %}
                             <li><a href="javascript:void(0);" class="fa fa-comment">{{post.comments.count}}</a></li>
                         </ul>
                     </div>
@@ -53,8 +57,9 @@
                     </div>
                     <div class="body widget">
                         <ul class="list-unstyled categories-clouds m-b-0">
-                            {% for cat in category_list %}
-                            <li><a href="">{{cat.name}}</a></li>
+                            {% for post in post_list %}
+                           
+                            <li><a href="">{{post.cat.name}}</a></li>
                             {% endfor %}
                         </ul>
                     </div>

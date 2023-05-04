@@ -1,18 +1,20 @@
-from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin,UserPassesTestMixin
+from typing import Any, Dict
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import render, redirect
+from django.forms.models import BaseModelForm
+from django.http import HttpResponse
+from django.shortcuts import render, redirect,get_object_or_404
 from django.views.generic import ListView, DetailView,TemplateView
-from django.views.generic.edit import CreateView,UpdateView,DeleteView
-from django.urls import reverse_lazy,reverse
-from accounts.models import Profile
-from .models import Post , Comment , Category
+from django.views.generic.edit import CreateView,UpdateView,DeleteView,FormMixin
+from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+#from accounts.models import Profile
 from django.core.paginator import Paginator,EmptyPage
 from django.db.models import Q
-from django.http import response
-from django.contrib import messages 
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.decorators import login_required
-from .forms import PostForm
+#from django.http import response
+#from django.contrib import messages 
+from .forms import PostForm, CommentForm
+from .models import Post , Comment , Category
 
 # Create your views here.
 class BlogHomeView(TemplateView):
@@ -78,10 +80,12 @@ class BlogListView(ListView):
         # Add in a QuerySet of all the books
         context["category_list"] = Category.objects.all()
         return context
-        
+
+
 #add a permissionrequiedmixin only user allowed can read all post
-class BlogDetailView(LoginRequiredMixin, DetailView):
+class BlogDetailView(LoginRequiredMixin,DetailView):
     model=Post
+    form_class = CommentForm
     context_object_name = 'post'
     template_name='details.html'
     permission_required = 'blog.special_status'
@@ -139,25 +143,15 @@ class BlogDeleteView(LoginRequiredMixin,UserPassesTestMixin,SuccessMessageMixin,
         obj = self.get_object()
         return obj.author == self.request.user
     
+@login_required
 def postlikes(request,pk):
-    post_id = request.POST.get('post.pk')
-    post = Post.objects.get(pk=post_id)
-    
+    post = get_object_or_404(Post,id=pk)
+    if request.user in post.likes.all():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+    return redirect('details',pk=post.pk)
 
-class CommentView(CreateView):
-    model = Comment
-    template_name = 'make_comment.html'
-    fields = ['comment']
-
-    
-    def form_valid(self,form):
-        #print('"post request')
-        # = self.request.POST.get('objid')
-        #to_db = Comment.objects.create(post_id=objid)
-        form.instance.author=self.request.user
-        #form.instance.post=self.request.post_id
-        print(form.cleaned_data)
-        return super().form_valid(form)
     
 class SearchResultListView(ListView):
     model = Post
@@ -171,6 +165,14 @@ class SearchResultListView(ListView):
         query = self.request.GET.get('q')
         return Post.objects.filter(Q(title__icontains=query)| Q(date__icontains=query))
     
+class CommentCreateView(LoginRequiredMixin,CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name='details.html'
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.post = Post.objects.get(pk=self.kwargs['pk'])
+        return super().form_valid(form)
 
 

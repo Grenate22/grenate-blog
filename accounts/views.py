@@ -1,11 +1,8 @@
-from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin,UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import ListView, DetailView,TemplateView
-from django.views.generic.edit import CreateView,UpdateView,DeleteView
+from django.views.generic.edit import CreateView,UpdateView
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
-from django.contrib import messages
 from blog.models import Post
 from .models import Profile
 from .forms import CustomUserCreationForm,LoginForm,UpdateUserForm,UpdateProfileForm
