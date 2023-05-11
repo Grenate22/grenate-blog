@@ -8,24 +8,24 @@ for item in choices:
 class PostForm(forms.ModelForm):
         class Meta:
             model = Post
-            fields = ['title','category','body','picture']
+            fields = ['title','body','picture','status','tags']
 
             widgets = {
                   'title' : forms.TextInput(attrs={'class': 'form-control'}),
                   'category' : forms.Select (choices=choice_list, attrs={'class': 'form-control'}),
-                  'body' : forms.Textarea(attrs={'class': 'form-control'}),
+                  'body' : forms.Textarea(attrs={'class': 'form-control','rows':3}),
                   'picture' : forms.FileInput(attrs={'class': 'form-control'}),
+                  'status' : forms.CheckboxInput(attrs={'class': 'form-control'}),
+                  'tags' : forms.TextInput(attrs={'class': 'form-control'}),
                   
             }
 
 class CommentForm(forms.ModelForm):
       class Meta:
             model = Comment
-            fields = ('comment','author')
+            fields = ['comment']
 
-            widgets ={
-                  'comment' : forms.TextInput(attrs={'class': 'form-control'}),
-                  'author' : forms.TextInput(attrs={'class': 'form-control'}),
+            widgets = {
+                  'comment' : forms.Textarea(attrs={'class': 'form-control','rows': 3}),
             }
-
       

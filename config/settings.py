@@ -29,14 +29,12 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG')
 
-ALLOWED_HOSTS = ['.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['.herokuapp.com','.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'crispy_forms',
-    'crispy_bootstrap4',
     'blog',
     'accounts',
     'django.contrib.humanize',
@@ -51,7 +49,10 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google'
+    'allauth.socialaccount.providers.google',
+    'crispy_forms',
+    'crispy_bootstrap4',
+    'taggit',
     
 
 ]
@@ -68,6 +69,15 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+#Email server configuration
+EMAIL_BACKEND  = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'peteradetunji30@gmail.com'
+EMAIL_HOST_PASSWORD = 'jzmhqlacszhgkxcy'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'peteradetunji30@gmail.com'
+SERVER_EMAIL = ''
 
 
 MIDDLEWARE = [
@@ -156,6 +166,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS= [str(BASE_DIR.joinpath('static'))]
 STATIC_ROOT=STATIC_ROOT=str(BASE_DIR.joinpath('staticfiles'))
 STATICFILES_STORAGE='whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
@@ -172,7 +186,7 @@ AUTH_USER_MODEL= 'accounts.CustomUser'
 
 CRISPY_TEMPLATE_PACK= 'bootstrap4'
 
-EMAIL_BACKEND  = 'django.core.mail.backends.console.EmailBackend'
+
 
 SITE_ID = 1
 

@@ -1,0 +1,9 @@
+<div id="comments_section">
+    <form action="" method="post">
+    {% csrf_token %}
+<div class="from-group">
+{{ comment_form }}
+<button class="btn btninfo" type="submit">Add comment <i class="fas fa-comments"></i></button>
+</div>
+</form>
+</div>

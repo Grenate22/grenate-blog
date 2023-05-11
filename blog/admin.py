@@ -10,6 +10,11 @@ class PostAdmin(admin.ModelAdmin):
         CommentInLine,
     ]
     list_display = ('title','author','date')
+    list_filter = ('status','date','author')
+    search_fields = ('title','body')
+    raw_id_fields = ('author',)
+    date_hierarchy = 'date'
+    ordering = ('status','date')
 
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('post','comment','author')

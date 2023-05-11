@@ -1,36 +1,10 @@
 {% extends 'base.html' %}
 {% load humanize %}
+{% load crispy_forms_tags %}
 {% block content %}
 
-<div class="card-footer ">
-    {{post.comments.count}}
-    {% for comment in post.comments.all %}
-    <p>
-        {% if comment.author == post.author %}
-        <span class="font-weight-bold">
-            Author &middot;
-        </span>
-        {{comment.comment}}
-        {{comment.timestamp}}
-        {% else %}
-        <span class="font-weight-bold">
-            {{comment.author}} &middot;
-        </span>
-        {{comment.comment}}
-        {{comment.timestamp}}
-        {% endif %}
-    </p>
-    {% empty %}
-    <p>No comment yets</p>
-    {% endfor %} 
-</div>
-<hr>
-<h3>Add a comments</h3>
-<form  method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">Submit</button>
-</form>
+
+
 
 <div class="blog-single gray-bg">
     <div class="container">
@@ -59,29 +33,58 @@
                         <p>{{post.body}}</p>
                     </div>
                     <div class="page-item">
-                        <p> Back to <a href="{% url 'home' %}">Home</a>.</p>
+                        <p> Back to <a class="badge badge-light" href="{% url 'home' %}">Home</a>.</p>
                         {% if post.author == request.user %}
-                        <a href="{% url 'edit' post.id %}">Edit your Blog Post</a> 
-                        <a href="{% url 'delete' post.id %}">Delete your Blog Post</a>
+                        <div>
+                        <a class="badge badge-secondary" href="{% url 'edit' post.id %}">Edit your Blog Post</a> 
+                        <a class="badge badge-danger" href="{% url 'delete' post.id %}">Delete your Blog Post</a>
+                        </div>
                         {% endif %}
+                        <br>
                         {% if request.user in post.likes.all %}
                         <form action="{% url 'like_post' post.id %}" method="post">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-danger">Unlike</button>
+                            <button type="submit" class="badge badge-danger">Unlike</button>
                         </form>
                         {% else %}
                         <form action="{% url 'like_post' post.id %}" method="post">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-success">Like</button>
+                            <button type="submit" class="badge badge-success">Like</button>
                         </form>
                         {% endif %}
+                        <h2>Leave a comment!</h2>
+                        {% include "comment_form.html" %}
 
-                        
-
-
+                        {% if comments %}
+                        {% with comments.count as total_comments %}
+                            <strong class="text-secondary">{{ total_comments }} comment{{ total_comments|pluralize }}</strong>
+                        {% endwith %}
+                        <hr>
+                        <ul>
+                            {% for comment in comments %}
+                            <li>
+                                <div>
+                                    <span>
+                                        {% if comment.author == post.author %}
+                                        <strong class="text-info">{{comment.author}} <span class="badge badge-secondary">Author</span></strong>
+                                        {% else %}
+                                        <strong class="text-info">{{comment.author}}</strong>
+                                        {% endif %}
+                                        <small class="text-muted">{{comment.timestamp}}</small>
+                                    </span>
+                                    <p>
+                                        {{comment.comment|safe}}
+                                    </p>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <strong class="text-secondary">No comments yet...</strong>
+                        {% endif %}
                     </div>
                     <div class="nav tag-cloud">
-                        <a href="">{{post.category}}</a>
+                       
                     </div>
                 </article>
             </div>
@@ -119,68 +122,24 @@
                 <!-- Latest Post -->
                 <div class="widget widget-latest-post">
                     <div class="widget-title">
-                        <h3>Latest Post</h3>
+                        <h3>Similar posts</h3>
+                        {% for post in similar_posts %}
                     </div>
                     <div class="widget-body">
-                        <div class="latest-post-aside media">
-                            <div class="lpa-left media-body">
-                                <div class="lpa-title">
-                                    <h5><a href="#">Prevent 75% of visitors from google analytics</a></h5>
-                                </div>
-                                <div class="lpa-meta">
-                                    <a class="name" href="#">
-                                        Rachel Roth
-                                    </a>
-                                    <a class="date" href="#">
-                                        26 FEB 2020
-                                    </a>
-                                </div>
+                            <div >
+                                 <h5><a href="{{post.get_absolute_url}}">{{post.title}}</a></h5>
                             </div>
-                            <div class="lpa-right">
-                                <a href="#">
-                                    <img src="https://www.bootdey.com/image/400x200/FFB6C1/000000" title="" alt="">
+                            <div >
+                                <a class="name" href="#">
+                                    {{post.author}}
+                                 </a>
+                                 <a class="date" href="#">
+                                    {{post.date}}
                                 </a>
                             </div>
-                        </div>
-                        <div class="latest-post-aside media">
-                            <div class="lpa-left media-body">
-                                <div class="lpa-title">
-                                    <h5><a href="#">Prevent 75% of visitors from google analytics</a></h5>
-                                </div>
-                                <div class="lpa-meta">
-                                    <a class="name" href="#">
-                                        Rachel Roth
-                                    </a>
-                                    <a class="date" href="#">
-                                        26 FEB 2020
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="lpa-right">
-                                <a href="#">
-                                    <img src="https://www.bootdey.com/image/400x200/FFB6C1/000000" title="" alt="">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="latest-post-aside media">
-                            <div class="lpa-left media-body">
-                                <div class="lpa-title">
-                                    <h5><a href="#">Prevent 75% of visitors from google analytics</a></h5>
-                                </div>
-                                <div class="lpa-meta">
-                                    <a class="name" href="#">
-                                        Rachel Roth
-                                    </a>
-                                    <a class="date" href="#">
-                                        26 FEB 2020
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="lpa-right">
-                                <a href="#">
-                                    <img src="https://www.bootdey.com/image/400x200/FFB6C1/000000" title="" alt="">
-                                </a>
-                            </div>
+                            {% empty %}
+                            There are no similar posts yet
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

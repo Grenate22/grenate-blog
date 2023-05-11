@@ -12,6 +12,7 @@ django-environ = "*"
 pillow = "*"
 psycopg2 = "*"
 humanize = "*"
+django-taggit = "*"
 
 [dev-packages]
 

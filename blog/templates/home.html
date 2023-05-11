@@ -5,6 +5,9 @@
 
 {% block content %}
 <br>
+{% if tag %}
+<h2>Posts tagged with {{ tag.name }}</h2>
+{% endif %}
 
 <div id="main-content" class="blog-page">
     <div class="container">
@@ -22,33 +25,33 @@
                         <small class="text-muted"> By {{post.author}} | {{post.date|naturaltime }} </small>
                         <br>
                         <br>
-                        <p>{{post.body|truncatechars:200 }}</p>
+                        <p>{{post.body|truncatechars:200 | linebreaks }} <a  href="{% url 'details' post.pk %}" class="badge badge-light">Continue Reading</a></p>
+                        <p class="tags">
+                            {% for tag in post.tags.all %}
+                            <a class="badge badge-info" href="{% url 'post_list_by_tag' tag.slug %}">
+                                {{tag.name}}
+                            </a>
+                            {% if not forloop.last %} {% endif %}
+                            {% endfor %}
+                        </p>
                     </div>
                     <div class="footer">
-                        <div class="actions">
-                            <a href="{% url 'details' post.pk %}" class="btn btn-outline-secondary">Continue Reading</a>
-                        </div>
+
                         <ul class="stats">
-                            <li><a href="{% url 'category_list' post.category %}">{{post.category}}</a></li>
+                            
                             {% if request.user in post.likes.all %}
                             <li><a href="{% url 'like_post' post.id %}" class="fa fa-heart" style="color: red;">{{post.likes.count}}</a></li>
                             {% else %}
                             <li><a href="{% url 'like_post' post.id %}" class="fa fa-heart">{{post.likes.count}}</a></li>
                             {% endif %}
-                            <li><a href="javascript:void(0);" class="fa fa-comment">{{post.comments.count}}</a></li>
+                            <li><a href="{% url 'like_post' post.id %}" class="fa fa-comment">{{post.comments.count}}</a></li>
+                            
                         </ul>
                     </div>
                 </div>
                 {% endfor %}
-                <ul class="pagination pagination-primary">
-                    {% if page_obj.has_previous %}
-                    <li class=""><a class="" href="{% url 'home' %}?page={{ page_obj.previous_page_number }}">Previous</a></li>
-                    {% endif %}
-                    <li class="page-item">page {{page_obj.number}} of {{page_obj.paginator.num_pages }}</li>
-                    {% if page_obj.has_next %}
-                    <li class="page-item"><a class="" href="{% url 'home' %}?page={{ page_obj.next_page_number }}"> Next</a></li>
-                    {% endif %}
-                </ul> 
+                {% include "pagination.html" with page=post_list %}
+             
             </div> 
             <div class="col-lg-4 col-md-12 right-box">
                 <div class="card">
@@ -57,10 +60,9 @@
                     </div>
                     <div class="body widget">
                         <ul class="list-unstyled categories-clouds m-b-0">
-                            {% for post in post_list %}
                            
-                            <li><a href="">{{post.cat.name}}</a></li>
-                            {% endfor %}
+                            <li><a href=""></a></li>
+                            
                         </ul>
                     </div>
                 </div>
@@ -83,6 +85,11 @@
         </div>
     </div>
 </div>   
+<ul>
+    {% for popular_post in popular_posts %}
+    <li><a href="{{popular_post.post.get_absolute_url}}">{{popular_post.title}}</a>{{popular_post.views}}</li>
+    {% endfor %}
+</ul>
 
 
 {% endblock %}
