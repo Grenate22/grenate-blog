@@ -71,13 +71,12 @@ SOCIALACCOUNT_PROVIDERS = {
 
 #Email server configuration
 EMAIL_BACKEND  = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'peteradetunji30@gmail.com'
-EMAIL_HOST_PASSWORD = 'jzmhqlacszhgkxcy'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'peteradetunji30@gmail.com'
-SERVER_EMAIL = ''
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+
 
 
 MIDDLEWARE = [
