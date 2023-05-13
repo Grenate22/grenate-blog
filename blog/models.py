@@ -32,7 +32,6 @@ class Post(models.Model):
     author= models.ForeignKey('accounts.CustomUser',on_delete=models.CASCADE)
     body= RichTextField(blank=True, null=True)
     #body= models.TextField()
-    category = models.CharField(max_length=200, default='coding')
     date= models.DateTimeField(default=timezone.localtime,blank=True)
     picture = models.ImageField(upload_to='covers/', blank=True)
     profile = models.ForeignKey(Profile,on_delete=models.CASCADE , null=True ,blank=True)
@@ -63,14 +62,7 @@ class Post(models.Model):
         #if not self.slug:
             #self.slug = slugify(self.title)
         #return super(Post,self).save(*args,**kwargs)
-class Category(models.Model):
-    name = models.CharField(max_length=150)
 
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('home')
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE,related_name='comments')

@@ -219,3 +219,11 @@ AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
 
 ACCOUNT_SESSION_REMEMBER = False
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
+
+import dj_database_url
+
+DATABASE_URL = env("DATABASE_URL")
+
+DATABASES = {
+    "default" : dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
+}

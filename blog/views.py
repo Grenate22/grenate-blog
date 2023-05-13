@@ -17,7 +17,7 @@ from django.db.models import Q
 #from django.http import response
 #from django.contrib import messages 
 from .forms import PostForm, CommentForm
-from .models import Post , Comment , Category, PopularPost ,PopularPostManager
+from .models import Post , Comment , PopularPost ,PopularPostManager
 
 # Create your views here.
 class BlogHomeView(TemplateView):
@@ -135,16 +135,6 @@ class BlogCreateView(LoginRequiredMixin,SuccessMessageMixin,CreateView):
         form.instance.author=self.request.user
         return super().form_valid(form)
     
-class CategoryCreateView(LoginRequiredMixin,SuccessMessageMixin,CreateView):
-    model= Category
-    template_name='create_category.html'
-    fields = '__all__'
-    success_url=reverse_lazy('home')
-    success_message = "Your category has been added"
-
-def CategoryView(request ,cats):
-    category_posts = Post.objects.filter(category=cats)
-    return render(request, 'categories.html',{'cats':cats.title(), 'category_posts': category_posts})
 
     
 #userpassestestmixin give an authorization to only the owner of the content 
