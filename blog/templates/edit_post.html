@@ -4,6 +4,7 @@
 <h2>Edit your post</h2>
 <form action="" method="post">
     {% csrf_token %}
+    {{ form.media }}
     {{ form|crispy }}
     <button class="btn btn-info ml-5" type="submit">Update</button> <a class="btn btn-link" href="{% url 'details' post.pk %}">Back</a>
 </form>

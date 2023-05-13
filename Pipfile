@@ -13,6 +13,10 @@ pillow = "*"
 psycopg2 = "*"
 humanize = "*"
 django-taggit = "*"
+django-ckeditor = "*"
+django-debug-toolbar = "*"
+gunicorn = "*"
+waitress = "*"
 
 [dev-packages]
 

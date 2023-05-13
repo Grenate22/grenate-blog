@@ -51,11 +51,13 @@ class BlogListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        tags = Tag.objects.all()
         #the method below retrieve page number parameter it contain the requested page number if thr page parameter is not in the get parameters of the request we use the default value 1 to load the first page of results
         page = self.request.GET.get('page',1)
-        posts = Post.objects.all()
+        posts = Post.objects.get_queryset().order_by('pk')
         Paginator = self.paginator_class(posts,self.paginate_by)
         posts = Paginator.page(page)
+        context['tags']=tags
         context['posts']=posts
         return context
 

@@ -7,6 +7,7 @@ from datetime import datetime
 from accounts.models import Profile
 import uuid
 from PIL import Image
+from ckeditor.fields import RichTextField
 from taggit.managers import TaggableManager
 from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
 # Create your models here.
@@ -29,7 +30,8 @@ class Post(models.Model):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     title= models.CharField(max_length=200)
     author= models.ForeignKey('accounts.CustomUser',on_delete=models.CASCADE)
-    body= models.TextField()
+    body= RichTextField(blank=True, null=True)
+    #body= models.TextField()
     category = models.CharField(max_length=200, default='coding')
     date= models.DateTimeField(default=timezone.localtime,blank=True)
     picture = models.ImageField(upload_to='covers/', blank=True)

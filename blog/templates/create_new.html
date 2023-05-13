@@ -5,6 +5,7 @@
 <h1>Create new post</h1>
 <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
+    {{ form.media }}
     {{ form | crispy }}
     <input class="btn btn-success ml-5" type="submit" value="save">
 </form>

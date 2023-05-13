@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="article-content">
-                        <p>{{post.body}}</p>
+                        <p>{{post.body|safe}}</p>
                     </div>
                     <div class="page-item">
                         <p> Back to <a class="badge badge-light" href="{% url 'home' %}">Home</a>.</p>
@@ -109,16 +109,6 @@
                     
                 </div>
                 <!-- End Author -->
-                <!-- Trending Post -->
-                <div class="widget widget-post">
-                    <div class="widget-title">
-                        <h3>Trending Now</h3>
-                    </div>
-                    <div class="widget-body">
-
-                    </div>
-                </div>
-                <!-- End Trending Post -->
                 <!-- Latest Post -->
                 <div class="widget widget-latest-post">
                     <div class="widget-title">
@@ -145,18 +135,7 @@
                 </div>
                 <!-- End Latest Post -->
                 <!-- widget Tags -->
-                <div class="widget widget-tags">
-                    <div class="widget-title">
-                        <h3>Latest Tags</h3>
-                    </div>
-                    <div class="widget-body">
-                        <div class="nav tag-cloud">
-                            {% for cat in category_list %}
-                            <a href="#">{{cat.name}}</a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
+               
                 <!-- End widget Tags -->
             </div>
         </div>
