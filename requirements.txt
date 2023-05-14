@@ -42,3 +42,4 @@ virtualenv==20.21.0
 virtualenv-clone==0.5.7
 waitress==2.1.2
 whitenoise==6.4.0
+django-cloudinary-storage 0.3.0
