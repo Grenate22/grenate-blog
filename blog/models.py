@@ -32,6 +32,7 @@ class Post(models.Model):
     author= models.ForeignKey('accounts.CustomUser',on_delete=models.CASCADE)
     body= RichTextField(blank=True, null=True)
     #body= models.TextField()
+    
     date= models.DateTimeField(default=timezone.localtime,blank=True)
     picture = models.ImageField(upload_to='covers/', blank=True)
     profile = models.ForeignKey(Profile,on_delete=models.CASCADE , null=True ,blank=True)
