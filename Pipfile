@@ -17,6 +17,7 @@ django-ckeditor = "*"
 django-debug-toolbar = "*"
 gunicorn = "*"
 waitress = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 

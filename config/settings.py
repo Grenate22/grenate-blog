@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import environ
+from django.middleware.clickjacking import XFrameOptionsMiddleware
+from django.middleware.common import CommonMiddleware
 
 env = environ.Env()
 environ.Env.read_env()
@@ -32,11 +34,11 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
-SECURE_SSL_REDIRECT = env.bool('DJANGO_SECURE_SSL_REDIRECT')
+SECURE_SSL_REDIRECT = bool(os.getenv('DJANGO_SECURE_SSL_REDIRECT'))
 
-SECURE_HSTS_SECONDS = env.int('DJANGO_SECURE_HSTS_SECONDS', default=2592000)
-SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool('DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True)
-SECURE_HSTS_PRELOAD = env.bool('DJANGO_SECURE_HSTS_PRELOAD', default=True)
+SECURE_HSTS_SECONDS = int(os.getenv('DJANGO_SECURE_HSTS_SECONDS', default=2592000))
+SECURE_HSTS_INCLUDE_SUBDOMAINS = bool(os.getenv('DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True))
+SECURE_HSTS_PRELOAD = bool(os.getenv('DJANGO_SECURE_HSTS_PRELOAD', default=True))
 
 
 # Application definition
@@ -92,7 +94,7 @@ EMAIL_USE_TLS = env("EMAIL_USE_TLS")
 
 
 MIDDLEWARE = [
-    'django.middleware.cache.UpdateCacheMiddleware',
+    #'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -102,12 +104,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-#'django.middleware.cache.FectFromCacheMiddleware',
+    #'django.middleware.cache.FectFromCacheMiddleware',
 ]
 
 CSRF_TRUSTED_ORIGINS = ['http://*','https://*']
-CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = bool(os.getenv('DJANGO_CSRF_COOKIE_SECURE', default=True))
 CSRF_COOKIE_HTTPONLY = False
+SESSION_COOKIE_SECURE =bool(os.getenv('DJANGO_SESSION_COOKIE_SECURE', default=True))
 
 CACHE_MIDDLEWARE_ALIAS = "default"
 CACHE_MIDDLEWARE_SECONDS = 604800
