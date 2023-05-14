@@ -19,7 +19,7 @@ class Profile(models.Model):
     linkedln_url = models.URLField(max_length=200,null=True,blank=True)
     
     #we make a default image for our user that they can update later and we specify the path our model will get it we also specify the path we upload to cuz django handle pictures and file seperately 
-    avatar = models.ImageField(default='profile_pic/avatar.png/', upload_to='profile_pic/')
+    avatar = models.ImageField(default='profile/avatar_i08eqb.png', upload_to='images')
     bio = models.TextField()
 
     def __str__(self) :

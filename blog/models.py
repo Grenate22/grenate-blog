@@ -7,6 +7,7 @@ from datetime import datetime
 from accounts.models import Profile
 import uuid
 from PIL import Image
+
 from ckeditor.fields import RichTextField
 from taggit.managers import TaggableManager
 from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
@@ -34,7 +35,7 @@ class Post(models.Model):
     #body= models.TextField()
     
     date= models.DateTimeField(default=timezone.localtime,blank=True)
-    picture = models.ImageField(upload_to='covers/', blank=True)
+    picture = models.ImageField(upload_to='images')
     profile = models.ForeignKey(Profile,on_delete=models.CASCADE , null=True ,blank=True)
     status = models.CharField(max_length=2, choices=Status.choices,default=Status.DRAFT)
     likes = models.ManyToManyField('accounts.CustomUser', related_name='blog_posts')
