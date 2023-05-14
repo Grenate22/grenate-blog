@@ -121,8 +121,8 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     #'django.middleware.cache.FectFromCacheMiddleware',
 ]
-
-CSRF_TRUSTED_ORIGINS = ['http://*','https://*']
+if not DEBUG:
+    CSRF_TRUSTED_ORIGINS = ['https://grenate-blog-production.up.railway.app/']
 CSRF_COOKIE_SECURE = bool(os.getenv('DJANGO_CSRF_COOKIE_SECURE', default=True))
 CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_SECURE =bool(os.getenv('DJANGO_SESSION_COOKIE_SECURE', default=True))
