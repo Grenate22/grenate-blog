@@ -47,9 +47,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-SECURE_SSL_REDIRECT = bool(os.getenv('DJANGO_SECURE_SSL_REDIRECT'))
 
-SECURE_HSTS_SECONDS = int(os.getenv('DJANGO_SECURE_HSTS_SECONDS', default=2592000))
+
+SECURE_HSTS_SECONDS = 2592000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = bool(os.getenv('DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True))
 SECURE_HSTS_PRELOAD = bool(os.getenv('DJANGO_SECURE_HSTS_PRELOAD', default=True))
 SECURE_PROXY_SSL_HEADER = None
@@ -121,10 +121,10 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     #'django.middleware.cache.FectFromCacheMiddleware',
 ]
-if not DEBUG:
-    CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
+
+CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
 CSRF_COOKIE_SECURE = bool(os.getenv('DJANGO_CSRF_COOKIE_SECURE', default=True))
-CSRF_COOKIE_HTTPONLY = False
+#CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_SECURE =bool(os.getenv('DJANGO_SESSION_COOKIE_SECURE', default=True))
 
 CACHE_MIDDLEWARE_ALIAS = "default"
